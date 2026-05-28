@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hina-dashboard-deployment
+  labels:
+    app: devops-dashboard
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: devops-dashboard
+  template:
+    metadata:
+      labels:
+        app: devops-dashboard
+    spec:
+      containers:
+      - name: dashboard
+        image: hinaksaacr.azurecr.io/hina-secure-app:v1
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hina-dashboard-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 5000
+  selector:
+    app: devops-dashboard
